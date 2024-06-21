@@ -1,0 +1,6 @@
+{
+  "watch": ["templates"],
+  "ext": "js,json,hbs,css",
+  "ignore": ["templates/mypdf.pdf"],
+  "exec": "node server.js --no-gen"
+}

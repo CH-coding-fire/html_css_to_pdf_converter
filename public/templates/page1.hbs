@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{nameOfPdf}}</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <div id="content">
+        <div class="titleBox" style="margin-bottom: 15px">
+            <div class="boxTextColor titleBoxText">{{largestTitleBox.leftText}}</div>
+            <div class="boxTextColor titleBoxSubText">{{largestTitleBox.rightText}}</div>
+        </div>
+        <div class="firstImage" style="background-image: url('{{serverURL}}/flags.png');">
+            <div class="titleText" style="margin-bottom: 20px">
+                <div id="bigTitle">{{title.text}}</div>
+            </div>
+            <div class="labelBox" style="margin-bottom: 10px">
+                <div class="labelRow">
+                    <div class="labelSmallBoxUltraWide">
+                        <div class="labelWidth">{{infoLabels.first.label}}</div>
+                        <div class="labelFont">{{infoLabels.first.content}}</div>
+                    </div>
+                    <div class="labelSmallBox">
+                        <div class="labelWidth">{{infoLabels.second.label}}</div>
+                        <div class="labelFont">{{infoLabels.second.content}}</div>
+                    </div>
+                    <div class="labelSmallBox">
+                        <div class="labelWidth">{{infoLabels.third.label}}</div>
+                        <div class="labelFont">{{infoLabels.third.content}}</div>
+                    </div>
+                </div>
+                <div class="labelRow">
+                    <div class="labelSmallBoxUltraWide">
+                        <div class="labelWidth">{{infoLabels.fourth.label}}</div>
+                        <div class="labelFont">{{infoLabels.fourth.content}}</div>
+                    </div>
+                    <div class="labelSmallBox">
+                        <div class="labelWidth">{{infoLabels.fifth.label}}</div>
+                        <div class="labelFont">{{infoLabels.fifth.content}}</div>
+                    </div>
+                    <div class="labelSmallBox">
+                        <div class="labelWidth">{{infoLabels.sixth.label}}</div>
+                        <div class="labelFont">{{infoLabels.sixth.content}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="smallDoubleColorLine" style="margin-bottom: 20px">
+            <div class="lightBlueEmptyBox"></div>
+            <div class="deepBlueEmptyBox"></div>
+        </div>
+        <div>
+            <div class="bigDoubleColorLine">
+                <div class="lightBlueEmptyBoxUltraWide">
+                    <div>{{firstRowBox.leftText}}</div>
+                    <div>{{firstRowBox.rightText}}</div>
+                </div>
+                <div class="deepBlueEmptyBox"></div>
+            </div>
+            <div class="sessionContainer">
+                <div class="leftSession">
+                    <div id="chart1" style="height:250px;"></div>
+                    <script src="https://code.highcharts.com/highcharts.js"></script>
+                    <script>
+                        document.addEventListener('DOMContentLoaded', function () {
+                            const chartData = {{{chart chart1}}};
+                            const chart = Highcharts.chart('chart1', {
+                                chart: {
+                                    type: 'bar',
+                                    animation: false
+                                },
+                                animation: false,
+                                title: {
+                                    text: chartData.titleText
+                                },
+                                xAxis: {
+                                    categories: chartData.categories
+                                },
+                                yAxis: {
+                                    title: {
+                                        text: chartData.yAxisTitleText
+                                    }
+                                },
+                                series: chartData.series,
+                            });
+                        });
+                    </script>
+                </div>
+                <div class="rightSession">
+                    <div class="figureDetails">
+                        <div class="figureDetailsLeft extraLargeFont">前日基準価額</div>
+                        <div class="figureDetailsRight">
+                            <div class="rightAlign">
+                                <div class="detailFigureGiantFont">559</div>
+                            </div>
+                            <div>円</div>
+                        </div>
+                    </div>
+                    <div class="figureDetails">
+                        <div class="figureDetailsLeft">純資産総額</div>
+                        <div class="figureDetailsRight">
+                            <div class="rightAlign">
+                                <div class="detailFigureNormalFont">778</div>
+                            </div>
+                            <div>百万円</div>
+                        </div>
+                    </div>
+                    <div class="figureDetails">
+                        <div class="figureDetailsLeft">決算日</div>
+                        <div class="figureDetailsRight">
+                            <div class="rightAlign">
+                                <div class="detailFigureNormalFont">毎月25日</div>
+                            </div>
+                            <div></div>
+                        </div>
+                    </div>
+
+                    <div class="figureDetails">
+                        <div class="figureDetailsLeft">分配金</div>
+                        <div class="figureDetailsRight">
+                            <div class="rightAlign">
+                                <div class="detailFigureNormalFont">0</div>
+                            </div>
+                            <div>円</div>
+                        </div>
+                    </div>
+
+                    <div class="figureDetails">
+                        <div class="figureDetailsLeft">分配金利回り</div>
+                        <div class="figureDetailsRight">
+                            <div class="rightAlign">
+                                <div class="detailFigureNormalFont">0.00</div>
+                            </div>
+                            <div>%</div>
+                        </div>
+                    </div>
+                    <div class="dotted-line"></div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <div class="bigDoubleColorLine">
+                <div class="lightBlueEmptyBoxUltraWide">
+                    <div>{{secondRowBox.leftText}}</div>
+                    <div></div>
+                </div>
+                <div class="deepBlueEmptyBox"></div>
+            </div>
+            <div class="explainPara">{{explainParagraph}}</div>
+        </div>
+    </div>
+    <div class="footer">
+        <div class="deepBlueEmptyBox"></div>
+        <div class="footerContainer">
+            <div class="footerParagraphContainer">
+                <div class="footerParagraph">{{footer.firstParagraph}}</div>
+                <div class="footerParagraph">{{footer.secondParagraph}}</div>
+            </div>
+            <div >
+                <img class="refinitivIcon" src="{{serverURL}}/refinitivIcon.png" alt="Refinitiv Icon">
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+</html>

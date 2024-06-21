@@ -1,0 +1,246 @@
+:root {
+    --DEEP_BLUE: #0241FF;
+    --LIGHT_BLUE: #00B1FF;
+    --DARK_GREY_FONT: #808080;
+    --LIGHT_GREY_FONT: #A7A7A7;
+    --WHITE: #FFFFFF;
+    --BLACK: #000000;
+    --FONT_SIZE_0: 6px;
+    --FONT_SIZE_1: 11px;
+    --FONT_SIZE_2: 12px;
+    --FONT_SIZE_3: 14px;
+    --FONT_SIZE_4: 16px;
+    --FONT_SIZE_5: 18px;
+    --FONT_SIZE_6: 20px;
+    --FONT_SIZE_7: 22px;
+    --FONT_SIZE_8: 24px;
+    --FONT_SIZE_9: 26px;
+    --TEXT_BEGIN_LEFT_PADDING: 2mm;
+    --BOX_X_PADDING: 3mm;
+    --A4_PADDING:3mm;
+
+}
+
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    width: 210mm; /* A4 width */
+    height: 297mm;
+    /*box-sizing: border-box;*/
+    overflow: hidden; /* Prevent scrolling */
+    border-color: red;
+    border: dotted;
+}
+
+.container {
+    max-width: 100%;
+    height: 100%;
+    padding: var(--A4_PADDING);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+
+    box-sizing: border-box;
+}
+
+button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.titleBox {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: var(--DEEP_BLUE);
+    height: 20mm;
+    padding: 0 var(--BOX_X_PADDING);
+}
+
+.titleBoxText {
+    font-size: var(--FONT_SIZE_9);
+    font-weight: bold;
+}
+
+.titleText {
+    font-size: var(--FONT_SIZE_9);
+    padding-left: var(--TEXT_BEGIN_LEFT_PADDING);
+}
+
+.firstImage {
+    background-repeat: no-repeat; /* Prevents the image from repeating */
+    background-position: right center; /* Positions the image to the right and vertically centered */
+    background-size: 150px 100px;
+}
+
+.titleBoxSubText {
+    color: var(--WHITE);
+    font-size: var(--FONT_SIZE_6);
+}
+
+.boxTextColor {
+    color: var(--WHITE);
+}
+
+.titleBoxSubText {
+    font-size: var(--FONT_SIZE_6);
+}
+
+.labelBox {
+    padding-left: var(--TEXT_BEGIN_LEFT_PADDING);
+}
+
+.labelRow {
+    display: flex;
+    flex-direction: row;
+}
+
+.labelSmallBox {
+    width: 70mm;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.labelSmallBoxUltraWide {
+    width: 100mm;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+}
+
+.labelWidth {
+    font-size: var(--FONT_SIZE_1);
+    width: 30mm;
+    color: var(--DARK_GREY_FONT);
+    font-weight: bold;
+}
+
+.labelFont {
+    font-size: var(--FONT_SIZE_1);
+    color: var(--BLACK);
+    font-weight: bold;
+}
+
+.bigDoubleColorLine {
+    margin-bottom: 3mm;
+}
+
+.deepBlueEmptyBox {
+    background-color: var(--DEEP_BLUE);
+    height: 1mm;
+}
+
+.lightBlueEmptyBox {
+    background-color: var(--LIGHT_BLUE);
+    height: 1mm;
+}
+
+.lightBlueEmptyBox {
+    background-color: var(--LIGHT_BLUE);
+    height: 1mm;
+}
+
+.lightBlueEmptyBoxUltraWide {
+    display: flex;
+    align-items: center;
+    background-color: var(--LIGHT_BLUE);
+    height: 8mm;
+    font-weight: bold;
+    font-size: var(--FONT_SIZE_4);
+    color: var(--WHITE);
+    justify-content: space-between;
+    padding: 0 var(--BOX_X_PADDING);
+}
+
+.leftSession {
+    width: 50%;
+}
+
+.rightSession {
+    width: 50%;
+}
+
+.sessionContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.explainPara {
+    font-size: var(--FONT_SIZE_1);
+    color: var(--BLACK);
+    margin-bottom: 10px;
+    min-height: 15mm;
+    padding-left: var(--TEXT_BEGIN_LEFT_PADDING);
+    font-weight: bold;
+}
+
+.figureDetails {
+    display: flex;
+    font-size: var(--FONT_SIZE_3);
+
+}
+
+.figureDetailsLeft {
+    width: 40%;
+    margin-right: 16mm;
+    color: var(--DARK_GREY_FONT);
+}
+
+
+.figureDetailsRight {
+    display: flex;
+    flex-direction: row;
+}
+
+.extraLargeFont {
+    font-size: var(--FONT_SIZE_6);
+}
+
+.rightAlign {
+    text-align: right;
+    width: 20mm;
+    margin-right: 2mm;
+}
+
+.detailFigureGiantFont {
+    font-size: var(--FONT_SIZE_9);
+    color: var(--BLACK);
+}
+
+.detailFigureNormalFont {
+    color: var(--BLACK);
+}
+
+.dotted-line {
+    border-top: 2px dotted grey;
+    width: 100%;
+}
+
+.footerContainer {
+    display: flex;
+}
+
+.footerParagraph {
+    font-size: var(--FONT_SIZE_0);
+    margin-bottom: 20px;
+    margin-top: 10px;
+}
+
+.footerParagraphContainer {
+    max-width: 75%
+}
+
+.refinitivIcon {
+    max-width: 50mm
+}
+
+.page-break {
+    page-break-after: always;
+}
+
+

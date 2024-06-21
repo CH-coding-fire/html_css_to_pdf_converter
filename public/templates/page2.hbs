@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{nameOfPdf}}</title>
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+<body>
+
+<div class="container">
+    <div id="content">
+        <div class="titleBox" style="margin-bottom: 15px">
+            <div class="boxTextColor titleBoxText">{{largestTitleBox.leftText}}</div>
+        </div>
+        <h2>
+            本資料の利用について
+        </h2>
+        <div class="smallDoubleColorLine" style="margin-bottom: 20px">
+            <div class="lightBlueEmptyBox"></div>
+            <div class="deepBlueEmptyBox"></div>
+        </div>
+        <p>
+            {{personalDataOrdinance}}
+        </p>
+    </div>
+
+    <div class="footer">
+        <div class="deepBlueEmptyBox"></div>
+        <div class="footerContainer">
+            <div class="footerParagraphContainer">
+                <div class="footerParagraph">{{footer.firstParagraph}}</div>
+                <div class="footerParagraph">{{footer.secondParagraph}}</div>
+            </div>
+            <div >
+                <img class="refinitivIcon" src="{{serverURL}}/refinitivIcon.png" alt="Refinitiv Icon">
+            </div>
+        </div>
+    </div>
+
+</div>
+</body>
+</html>
