@@ -1,4 +1,9 @@
 :root {
+    --BOX_X_PADDING: 3mm;
+    --A4_PADDING:3mm;
+    --A4_WIDTH:210mm;
+    --A4_HEIGHT:297mm;
+    --PAPER_BORDER_VISUALIZATION: 5px dotted red;
     --DEEP_BLUE: #0241FF;
     --LIGHT_BLUE: #00B1FF;
     --DARK_GREY_FONT: #808080;
@@ -16,21 +21,17 @@
     --FONT_SIZE_8: 24px;
     --FONT_SIZE_9: 26px;
     --TEXT_BEGIN_LEFT_PADDING: 2mm;
-    --BOX_X_PADDING: 3mm;
-    --A4_PADDING:3mm;
-
 }
 
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    width: 210mm; /* A4 width */
-    height: 297mm;
+    width: var(--A4_WIDTH); /* A4 width */
+    height: var(--A4_HEIGHT); /* A4 width */
     /*box-sizing: border-box;*/
     overflow: hidden; /* Prevent scrolling */
-    border-color: red;
-    border: dotted;
+    border: var(--PAPER_BORDER_VISUALIZATION);
 }
 
 .container {
@@ -42,13 +43,6 @@ body {
     justify-content: space-between;
 
     box-sizing: border-box;
-}
-
-button {
-    margin-top: 20px;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
 }
 
 .titleBox {

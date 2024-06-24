@@ -1,7 +1,6 @@
 module.exports = {
-    proxy: "localhost:3000",
-    files: ["templates/**/*.{html,css,hbs,js}"],
-    port: 3001,
-    open: false,
-    notify: false,
+    proxy: "localhost:3001",
+    files: ["public/templates/**/*.{html,css,hbs,js}"],
+    port: 3002,
+    open: true,
 };

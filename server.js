@@ -5,23 +5,32 @@ const path = require('path');
 const puppeteer = require('puppeteer');
 const { PDFDocument } = require('pdf-lib');
 
+//CONFIGS THAT YOU PROBABLY NEED TO ADJUST //
+//MOST IMPORTANT: need to have EXACT same name as hbs files in /templates folder, also the sequence will determine the page sequence in pdf
+const HBS_FILES_FOR_PDF_GENERATION = ["examplePage1", "examplePage2"]
+const NO_UNIQUE_FILE_NAME = true
+const IS_OMIT_PAPER_HELPER_BORDER_IN_PDF = true
+const SLEEP_TIME = 3000 //This 3 seconds is intended to wait for animation/image to load, before capturing the PDF
+//CONFIGS THAT YOU PROBABLY NEED TO ADJUST //
+
 const PDF_TARGET_FOLDER_NAME = "generatedPDF"
 const TEMPLATE_PATH = path.join(__dirname, 'public/templates');
 const CSS_PATH = path.join(TEMPLATE_PATH, 'styles.css');
 const IMG_PATH = path.join(__dirname, 'public/img');
-const HBS_FILES_FOR_DEV = process.argv[2];
-const HBS_FILES_FOR_PDF_GENERATION = ["page1", "page2"] //IMPORTANT: need to have exact same name as hbs files in /templates folder
-const SLEEP_TIME = 3000 //This 3 seconds is intented to wait for highchart to load all the animation first, before capturing the PDF
+
+const args = process.argv.slice(2);
+const HBS_FILES_FOR_DEV = args.find(arg => !arg.startsWith('--'));
+const IS_DEV_MODE = args.includes('--dev-mode');
 
 const app = express();
-const PORT = 3000;
+const PORT = IS_DEV_MODE? 3001:3000;
 
 app.use(express.static(TEMPLATE_PATH));
 app.use(express.static(IMG_PATH));
 
 const compile = async function(templateName, data) {
     const hbsFilePath = path.join(TEMPLATE_PATH, `${templateName}.hbs`);
-    const html = await fs.readFile(hbsFilePath, "utf-8"); //why utf-8? it is a buffer.
+    const html = await fs.readFile(hbsFilePath, "utf-8");
     return hbs.compile(html)(data);
 }
 
@@ -29,7 +38,6 @@ hbs.registerHelper('chart', function(context) {
     return JSON.stringify(context);
 });
 
-//This is for testing the html in browser
 app.get('/', async (req, res) => {
     const data = await getData()
     const content = await compile(HBS_FILES_FOR_DEV, data);
@@ -38,13 +46,8 @@ app.get('/', async (req, res) => {
 
 const server = app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
-    // if (process.argv.includes('--no-gen')) {
-    //     console.log('PDF will NOT be generated as this is testing mode. To generate, use "node server.js" ');
-    // }else{
-    //     genPDF();
-    // }
-    if (HBS_FILES_FOR_DEV) {
-        console.log(`localhost will serve ${HBS_FILES_FOR_DEV} PDF will NOT be generated as this is testing mode. To generate, use "node server.js" `);
+    if (IS_DEV_MODE && HBS_FILES_FOR_DEV) {
+        console.log(`Dev mode: ${HBS_FILES_FOR_DEV} will be served in localhost. PDF will NOT be generated as this is devmode. To generate PDF, use "npm run genpdf" `);
     }else{
         genPDF();
     }
@@ -53,8 +56,7 @@ const server = app.listen(PORT, () => {
 async function genPDF(){
     try {
         const data = await getData() //This should be getting data from database
-        console.log(`Going to combine ${HBS_FILES_FOR_PDF_GENERATION.length} pages in a single PDF... `)
-
+        logPDFGenerationMessage(HBS_FILES_FOR_PDF_GENERATION);
         const pdfPaths = [];
         for(const hbsFileName of HBS_FILES_FOR_PDF_GENERATION){
             const browser = await puppeteer.launch({
@@ -65,11 +67,16 @@ async function genPDF(){
             const content = await compile(hbsFileName, data);
             await page.setContent(content);
             const cssContent = await fs.readFile(CSS_PATH, 'utf-8');
-            await page.addStyleTag({ content: cssContent });
+            if(IS_OMIT_PAPER_HELPER_BORDER_IN_PDF){
+                const modifiedCSSContent = await omitBorderInCSS(cssContent);
+                await page.addStyleTag({ content: modifiedCSSContent });
+            }else{
+                await page.addStyleTag({ content: cssContent });
+            }
             await page.emulateMediaType("screen");
-            console.log(`Start generating pdf for ${hbsFileName}.hbs, should finish after ${SLEEP_TIME} milliseconds`)
+            console.log(`Start generating pdf for ${hbsFileName}.hbs, the sleep time is ${SLEEP_TIME} milliseconds`)
             await sleep(SLEEP_TIME); //This is intented to wait for highchart to load all the animation first, before capturing the PDF
-            const PDF_FILE_NAME = `${hbsFileName}_pdf_${getCurrentDateTimeString()}`;
+            const PDF_FILE_NAME = `${hbsFileName}${getCurrentDateTimeString()}`;
             const PDF_PATH = `./${PDF_TARGET_FOLDER_NAME}/${PDF_FILE_NAME}.pdf`;
             await page.pdf({
                 path: PDF_PATH,
@@ -82,16 +89,24 @@ async function genPDF(){
         if(HBS_FILES_FOR_PDF_GENERATION.length>1){
             console.log("Start combining")
             const combinedFileName = "combinedOutput"
-            const outputPath = `./${PDF_TARGET_FOLDER_NAME}/${combinedFileName}_${getCurrentDateTimeString()}.pdf`;
+            const outputPath = `./${PDF_TARGET_FOLDER_NAME}/${combinedFileName}${getCurrentDateTimeString()}.pdf`;
             combinePDFs(pdfPaths, outputPath)
-                .then(() => console.log('PDFs combined successfully'))
+                .then(() => {
+                    console.log('PDFs combined successfully')
+                    server.close(()=>{
+                        console.log('Job finished. Server is terminated')
+                    })
+                })
                 .catch(err => console.error('Failed to combine PDFs:', err));
+
+        }else{
+            server.close(()=>{
+                console.log('Job finished. Server is terminated')
+            })
         }
-        server.close(()=>{
-            console.log('Job finished. Server is terminated')
-        })
+
     } catch (e) {
-        console.log('ERROR!!!!', e);
+        console.log('ERROR!!!', e);
     }
 }
 
@@ -100,13 +115,14 @@ function sleep(ms) {
 }
 
 const getCurrentDateTimeString = () => {
+    if(NO_UNIQUE_FILE_NAME) return "";
     const now = new Date();
     const month = String(now.getMonth() + 1).padStart(2, '0');
     const date = String(now.getDate()).padStart(2, '0');
     const hours = String(now.getHours()).padStart(2, '0');
     const minutes = String(now.getMinutes()).padStart(2, '0');
     const seconds = String(now.getSeconds()).padStart(2, '0');
-    return `${month}${date}${hours}${minutes}${seconds}`;
+    return `_${month}${date}${hours}${minutes}${seconds}`;
 };
 
 async function combinePDFs(pdfPaths, outputPath) {
@@ -130,6 +146,21 @@ async function combinePDFs(pdfPaths, outputPath) {
     fs.writeFileSync(outputPath, pdfBytes);
 }
 
+const omitBorderInCSS = async (cssContent) => {
+    console.log("Omitting helper paper border in CSS... To turn this off, set IS_OMIT_PAPER_IN_PDF to false")
+    return cssContent.replace(/(--PAPER_BORDER_VISUALIZATION:\s*)([^;]+);/, '--PAPER_BORDER_VISUALIZATION: none;');
+};
+
+const logPDFGenerationMessage = (files) => {
+    if (files.length > 1) {
+        const lastFile = files[files.length - 1];
+        const fileString = files.slice(0, -1).join('", "');
+        console.log(`Going to combine "${fileString}" and "${lastFile}", into a single PDF. Make sure the file names are correct or it won't work`);
+    } else {
+        console.log("Please provide at least two hbs files for PDF generation.");
+    }
+};
+
 async function getData(){
     //Here should be logic about getting data from database
     const mockData= {
@@ -139,7 +170,7 @@ async function getData(){
             rightText: "2024年06月06日 18:28 更新"
         },
         title: {
-            text: "ＤＷＳ ロシア・ルーブル債券投信（毎月分配型）"
+            text: "ＤＷＳ ロシア・ルーブル債券投信（毎月分配型)"
         },
         infoLabels: {
             first: {

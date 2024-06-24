@@ -5,7 +5,9 @@
   "main": "index.js",
   "scripts": {
     "start": "nodemon",
-    "browsersync": "browser-sync start --config bs-config.js"
+    "browsersync": "browser-sync start --config bs-config.js",
+    "genpdf": "node server.js",
+    "devmode": "nodemon --dev-mode"
   },
   "keywords": [],
   "author": "",
